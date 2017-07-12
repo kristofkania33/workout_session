@@ -77,27 +77,28 @@ function startTimer() {
      }
      else if(time_left === 0) { //workout time has ended
     
-    present_workout++; //pointer for new workout from the list
+      present_workout++; //pointer for new workout from the list
           if(excercises_set[present_workout]) {
        time_left = excercises_set[present_workout].time; //calculate time for new workout
-    }
+         }
         else {
       clearInterval(timer); //stop interval
       alert('Error!');
       return false;
+      }
     }
       
-     } else {
+    else {
        
         //update workut info
           first_workout.innerText = 'Twoje cwiczenie: >>' + excercises_set[present_workout].name + '<<';
-          show_time.innerText = 'Czas start: >> ' + excercises_set[present_workout].time + ' !   <<  Odliczamy!';
+          show_time.innerText = 'Czas start: >> ' + time_left-- + ' !   <<  Odliczamy!';
        
-        //update time needed for completing workout
-          time_left--;
-          time--;
+        //update time needed for completing workout 
+          
+         time--;
      }
-   }
+  }
    
 
    var timer = setInterval(update,1000); //set interval (update status every second)
@@ -114,7 +115,12 @@ addWorkout.addEventListener('click', function() {
   
   var is_number = workout_time.value;
 
-  if (typeof is_number === "number" && isNaN(is_number) === false) {
+  if(is_number < 0) {
+
+            alert('Error. Czas trwania cwiczenia nie moze byc liczbą ujemną.');
+            //return false;
+
+  } else if (typeof is_number === "number" && isNaN(is_number) === false) {
     
     //push new workout to array
         excercises_set.push({name: workout_name.value, time: workout_time.value});
@@ -122,8 +128,7 @@ addWorkout.addEventListener('click', function() {
       //regenerate HTML view
         generateSet();
        
-  } 
-  else if (typeof is_number !== "number") {
+  } else if (typeof is_number !== "number") {
        // convert to number
        var new_value = parseInt(is_number);
        if (typeof new_value === "number" && isNaN(new_value) === false) {
@@ -133,8 +138,8 @@ addWorkout.addEventListener('click', function() {
   
             //regenerate HTML view
              generateSet();
-        }
-          else  {
+        } 
+        else  {
             alert('Error! To nie liczba!');
           return false;
         }
@@ -160,3 +165,16 @@ create_workout_set.addEventListener('click', function() {
   }
   
 })
+
+//function Workout(name, time) {
+ // this.name = name;
+ // this.time = time;
+//}
+
+//Workout.prototype.give_name function() {
+  //var name = prompt(Please enter the workout name!);
+  //var time = prompt(Please enter the workout time - seconds!)
+//}
+
+//var gym = new Workout(name, time);
+//gym.give_name();
