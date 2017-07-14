@@ -10,51 +10,60 @@ var addWorkout = document.getElementById('addWorkout'),
     set_workout = document.getElementById('set_workout');
 
 //create empty set of exercises
+    var excercises_set = [];
 
-var excercises_set = [];
-
-/* FUNCTIONS */
-
-//funtion for generating workout list from exercises array
-
-function generateSet() {
-  
-  //empty excersises DOM container
-  excercises.innerHTML = "";
-  
-  //add single workouts to DOM table
-  excercises_set.map(function(item) {
-    
-    var excercise1 = document.createElement("tr"); //create row
-    var column = document.createElement("td"); //create one column
-    
-    column.innerText = 'Trening: ' + item.name + ' - czas trwania: ' + item.time + '';
-    
-    excercise1.appendChild(column);
-    excercises.appendChild(excercise1);
-    
-  });
+//function responsible for creating single workout
+function Workout(name,time) {
+   this.name = name;
+   this.time = time;
 }
-  
-//function for running a workout session
+var train = new Workout(workout_name.value, workout_time.value);
+console.log(train);
 
-function startTimer() {
+
+//function responsible for creating workout session
+function Session () {
+
+  //funtion for generating workout list from exercises array
+
+    function generateSet() {
+  
+      //empty excersises DOM container
+      excercises.innerHTML = "";
+  
+      //add single workouts to DOM table
+      excercises_set.map(function(item) {
+    
+      var excercise1 = document.createElement("tr"); //create row
+      var column = document.createElement("td"); //create one column
+    
+      column.innerText = 'Trening: ' + item.name + ' - czas trwania: ' + item.time + '';
+    
+      excercise1.appendChild(column);
+      excercises.appendChild(excercise1);
+
+    
+      });
+    }
+
+    //function for running a workout session
+  function startTimer() {
       
    //count time needed for completing whole session 
-   var time = excercises_set.reduce(function(sum, item) {
-      return sum + Number(item.time);
-   }, 0);
+     var time = excercises_set.reduce(function(sum, item) {
+        return sum + Number(item.time);
+     }, 0);
 
    //set present workout to the first workout from the array
-   var present_workout = 0;
+     var present_workout = 0;
    
    //get time needed for completing the first workout
-   var time_left = excercises_set[present_workout].time;
+     var time_left = excercises_set[present_workout].time;
      
    //update counter 
-   function update() {
+    function update() {
      
-     if(time === 0) { //if time has runned out
+      if(time === 0) { //if time has runned out
       
        clearInterval(timer); //stop interval
 
@@ -74,21 +83,21 @@ function startTimer() {
        excercises_set = [];
        generateSet(); //regenerate HTML view
 
-     }
-     else if(time_left === 0) { //workout time has ended
+      }
+       else if(time_left === 0) { //workout time has ended
     
       present_workout++; //pointer for new workout from the list
           if(excercises_set[present_workout]) {
        time_left = excercises_set[present_workout].time; //calculate time for new workout
          }
         else {
-      clearInterval(timer); //stop interval
-      alert('Error!');
-      return false;
-      }
-    }
+        clearInterval(timer); //stop interval
+        alert('Error!');
+        return false;
+        }
+     }
       
-    else {
+      else {
        
         //update workut info
           first_workout.innerText = 'Twoje cwiczenie: >>' + excercises_set[present_workout].name + '<<';
@@ -97,19 +106,19 @@ function startTimer() {
         //update time needed for completing workout 
           
          time--;
-     }
-  }
+      }
+    }
    
 
-   var timer = setInterval(update,1000); //set interval (update status every second)
-}
+      var timer = setInterval(update,1000); //set interval (update status every second)
+  }
+  //addWorkout click event -> click to add workout
+   
+    addWorkout.click(function(){
+           add_Workout();
+    });
 
-
-/* EVENT LISTENERS */
-
-//addWorkout click event -> click to add workout
-
-addWorkout.addEventListener('click', function() {
+   function add_Workout(train) {
    
   //check typeof workout_time hier, if it's not a number convert it to number , if you can't do it show Error
   
@@ -144,13 +153,19 @@ addWorkout.addEventListener('click', function() {
           return false;
         }
   }
-})
+}
+
+/* EVENT LISTENERS */
 
 //createWorkoutSet click event -> click to start session
+create_workout_set.click (function(){
+           create_set();
+    });
+var length = excercises.length;
 
-create_workout_set.addEventListener('click', function() {
+function create_set(length) {
   
-  if (excercises.length == 0) { //if there are no exercises
+  if (length == 0) { //if there are no exercises
     set_workout.style.display = 'block';
     addWorkout.style.display = 'block';
     workout_name.style.display = 'block';
@@ -164,17 +179,7 @@ create_workout_set.addEventListener('click', function() {
     startTimer(); 
   }
   
-})
+}
 
-//function Workout(name, time) {
- // this.name = name;
- // this.time = time;
-//}
+}
 
-//Workout.prototype.give_name function() {
-  //var name = prompt(Please enter the workout name!);
-  //var time = prompt(Please enter the workout time - seconds!)
-//}
-
-//var gym = new Workout(name, time);
-//gym.give_name();
